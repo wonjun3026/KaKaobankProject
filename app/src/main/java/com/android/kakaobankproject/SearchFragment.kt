@@ -1,32 +1,30 @@
 package com.android.kakaobankproject
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.kakaobankproject.databinding.FragmentSearchBinding
+import com.android.kakaobankproject.kakaoData.Document
+import com.android.kakaobankproject.kakaoData.SearchData
+import com.android.kakaobankproject.netWork.NetWorkClient
+import com.android.kakaobankproject.recyclerView.SearchAdapter
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
+    private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater)}
+    var items = mutableListOf<Document>()
+    private var search: String = "사과"
+    private var searchAdapter = SearchAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
@@ -34,26 +32,50 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment searchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.searchButton.setOnClickListener {
+            search = binding.editSearch.text.toString()
+            Toast.makeText(requireContext(), search, Toast.LENGTH_SHORT).show()
+        }
+        searchData(setupSearchParameter(search))
+        binding.searchRecyclerView.apply {
+            adapter = searchAdapter
+            layoutManager = LinearLayoutManager(this@SearchFragment.context)
+
+        }
+
+    }
+
+//    companion object {
+//
+//        @JvmStatic
+//        fun newInstance(param1: String, param2: String) =
+//            SearchFragment().apply {
+//                arguments = Bundle().apply {
+//                    putString(ARG_PARAM1, param1)
+//                    putString(ARG_PARAM2, param2)
+//                }
+//            }
+//    }
+    private fun searchData(param: HashMap<String, String>) = lifecycleScope.launch {
+        val kakaoDto = NetWorkClient.searchNetWork.getImage("KakaoAK 5e8528dc4a83dcfa1bc04bb05cec677c", param)
+        Log.d("Parsing search ::", kakaoDto.toString())
+        items = kakaoDto.documents!!
+
+        SearchData.searchList = items
+    }
+
+    private fun setupSearchParameter(search: String): HashMap<String, String>{
+        return hashMapOf(
+            "query" to search,
+            "sort" to "recency",
+            "page" to "1",
+            "size" to "80"
+        )
     }
 }
