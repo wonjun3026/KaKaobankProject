@@ -41,12 +41,13 @@ class SearchFragment : Fragment() {
         binding.searchButton.setOnClickListener {
             search = binding.editSearch.text.toString()
             searchData(setupSearchParameter(search))
+            searchAdapter.notifyDataSetChanged()
         }
 
         binding.searchRecyclerView.apply {
             adapter = searchAdapter
             layoutManager = LinearLayoutManager(this@SearchFragment.context)
-            Toast.makeText(requireContext(), search, Toast.LENGTH_SHORT).show()
+
 
         }
 
@@ -66,8 +67,7 @@ class SearchFragment : Fragment() {
     private fun searchData(param: HashMap<String, String>) = lifecycleScope.launch {
         val kakaoDto = NetWorkClient.searchNetWork.getImage("KakaoAK 5e8528dc4a83dcfa1bc04bb05cec677c", param)
         Log.d("Parsing search ::", kakaoDto.toString())
-        items = kakaoDto.documents!!
-
+        items = kakaoDto.documents
         SearchData.searchList = items
     }
 

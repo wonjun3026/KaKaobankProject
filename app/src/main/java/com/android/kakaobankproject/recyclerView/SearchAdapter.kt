@@ -26,17 +26,17 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.Holder>() {
     override fun onBindViewHolder(holder: SearchAdapter.Holder, position: Int) {
         holder.itemView.setOnClickListener {
             itemClick?.onClick(it, position)
-            val imageUrl = searchList[position].imaga_url
-            Glide.with(holder.imageView.context)
-                .load(imageUrl)
-                .into(holder.imageView)
-            holder.site.text = SearchData.searchList[position].display_sitename
-            holder.currentTime.text = SearchData.searchList[position].datetime
         }
+        val imageUrl = searchList[position].thumbnail_url
+        Glide.with(holder.imageView.context)
+            .load(imageUrl)
+            .into(holder.imageView)
+        holder.site.text = searchList[position].display_sitename
+        holder.currentTime.text = searchList[position].datetime
     }
 
     override fun getItemCount(): Int {
-        return SearchData.searchList.size
+        return searchList.size
     }
 
     inner class Holder(binding: ItemRecyclerViewGridBinding) : RecyclerView.ViewHolder(binding.root){
