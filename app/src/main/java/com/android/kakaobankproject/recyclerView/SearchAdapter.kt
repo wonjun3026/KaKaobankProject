@@ -4,10 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.android.kakaobankproject.kakaoData.KakaoDto
-import com.android.kakaobankproject.kakaoData.SearchData.searchList
 import com.android.kakaobankproject.databinding.ItemRecyclerViewGridBinding
 import com.android.kakaobankproject.kakaoData.SearchData
+import com.android.kakaobankproject.kakaoData.SearchData.searchList
 import com.bumptech.glide.Glide
 
 class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.Holder>() {
@@ -33,6 +32,7 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.Holder>() {
             .into(holder.imageView)
         holder.site.text = searchList[position].display_sitename
         holder.currentTime.text = searchList[position].datetime
+        var like = SearchData.liked
     }
 
     override fun getItemCount(): Int {

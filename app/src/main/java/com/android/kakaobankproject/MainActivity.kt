@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.frameLayout, frag)
             .setReorderingAllowed(false)
-            .addToBackStack(null)
             .commit()
     }
 }

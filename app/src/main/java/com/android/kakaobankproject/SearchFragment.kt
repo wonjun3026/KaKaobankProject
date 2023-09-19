@@ -2,26 +2,31 @@ package com.android.kakaobankproject
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.android.kakaobankproject.databinding.FragmentSearchBinding
 import com.android.kakaobankproject.kakaoData.Document
 import com.android.kakaobankproject.kakaoData.SearchData
+import com.android.kakaobankproject.kakaoData.SearchData.liked
+import com.android.kakaobankproject.kakaoData.SearchData.searchList
+import com.android.kakaobankproject.likedData.LikedData
 import com.android.kakaobankproject.netWork.NetWorkClient
+import com.android.kakaobankproject.recyclerView.LikedAdapter
 import com.android.kakaobankproject.recyclerView.SearchAdapter
 import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
 
-    private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater)}
-    var items = mutableListOf<Document>()
+    private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
+    private var items = mutableListOf<Document>()
     private var search: String = "사과"
     private var searchAdapter = SearchAdapter()
+    private val likedAdapter = LikedAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,14 +51,22 @@ class SearchFragment : Fragment() {
 
         binding.searchRecyclerView.apply {
             adapter = searchAdapter
-            layoutManager = LinearLayoutManager(this@SearchFragment.context)
+            layoutManager = GridLayoutManager(this@SearchFragment.context, 2)
 
+        }
+        searchAdapter.itemClick = object : SearchAdapter.ItemClick {
+            override fun onClick(view: View, position: Int) {
+                if (liked[position] == "false") {
+                    LikedData.addLiked(position)
+                    likedAdapter.notifyDataSetChanged()
+                }
+            }
 
         }
 
     }
 
-//    companion object {
+    //    companion object {
 //
 //        @JvmStatic
 //        fun newInstance(param1: String, param2: String) =
@@ -65,13 +78,20 @@ class SearchFragment : Fragment() {
 //            }
 //    }
     private fun searchData(param: HashMap<String, String>) = lifecycleScope.launch {
-        val kakaoDto = NetWorkClient.searchNetWork.getImage("KakaoAK 5e8528dc4a83dcfa1bc04bb05cec677c", param)
+        var i: Int = 0
+        val kakaoDto =
+            NetWorkClient.searchNetWork.getImage("KakaoAK 5e8528dc4a83dcfa1bc04bb05cec677c", param)
         Log.d("Parsing search ::", kakaoDto.toString())
         items = kakaoDto.documents
-        SearchData.searchList = items
+
+        while (80 >= i) {
+            liked.add("false")
+            i++
+        }
+        searchList = items
     }
 
-    private fun setupSearchParameter(search: String): HashMap<String, String>{
+    private fun setupSearchParameter(search: String): HashMap<String, String> {
         return hashMapOf(
             "query" to search,
             "sort" to "recency",
