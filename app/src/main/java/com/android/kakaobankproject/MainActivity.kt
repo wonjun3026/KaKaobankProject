@@ -19,23 +19,25 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        val searchFragment = SearchFragment()
+        val lockerFragment = LockerFragment()
 
         binding.apply {
             searchLinearLayout.setOnClickListener{
-                val searchFragment = SearchFragment() // SearchFragment의 인스턴스 생성
                 setFragment(searchFragment)
             }
             lockerLinearLayout.setOnClickListener {
-                val lockerFragment = LockerFragment() // LockerFragment의 인스턴스 생성
+
                 setFragment(lockerFragment)
             }
         }
+        setFragment(searchFragment)
     }
 
     private fun setFragment(frag: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.frameLayout, frag)
-            .setReorderingAllowed(true)
+            .setReorderingAllowed(false)
             .addToBackStack(null)
             .commit()
     }

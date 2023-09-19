@@ -40,12 +40,13 @@ class SearchFragment : Fragment() {
 
         binding.searchButton.setOnClickListener {
             search = binding.editSearch.text.toString()
-            Toast.makeText(requireContext(), search, Toast.LENGTH_SHORT).show()
+            searchData(setupSearchParameter(search))
         }
-        searchData(setupSearchParameter(search))
+
         binding.searchRecyclerView.apply {
             adapter = searchAdapter
             layoutManager = LinearLayoutManager(this@SearchFragment.context)
+            Toast.makeText(requireContext(), search, Toast.LENGTH_SHORT).show()
 
         }
 

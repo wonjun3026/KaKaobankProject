@@ -12,8 +12,6 @@ import com.bumptech.glide.Glide
 
 class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.Holder>() {
 
-    var searchList =SearchData.retrieveData()
-
     interface ItemClick{
         fun onClick(view: View, position: Int)
     }
@@ -28,8 +26,7 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.Holder>() {
     override fun onBindViewHolder(holder: SearchAdapter.Holder, position: Int) {
         holder.itemView.setOnClickListener {
             itemClick?.onClick(it, position)
-//            holder.imageView= SearchData.searchList[position].imaga_url!!
-            val imageUrl = SearchData.searchList[position].imaga_url
+            val imageUrl = searchList[position].imaga_url
             Glide.with(holder.imageView.context)
                 .load(imageUrl)
                 .into(holder.imageView)
