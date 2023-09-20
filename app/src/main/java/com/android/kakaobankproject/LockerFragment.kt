@@ -1,19 +1,21 @@
 package com.android.kakaobankproject
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.kakaobankproject.databinding.FragmentLockerBinding
-import com.android.kakaobankproject.likedData.LikedData
 import com.android.kakaobankproject.recyclerView.LikedAdapter
+import org.w3c.dom.Document
 
 class LockerFragment : Fragment() {
     private val binding by lazy { FragmentLockerBinding.inflate(layoutInflater) }
-    private val likedAdapter = LikedAdapter()
-
+    var likedList = mutableListOf<com.android.kakaobankproject.kakaoData.Document>()
+    private val likedAdapter = LikedAdapter(likedList)
+    private lateinit var model: LikeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -32,23 +34,18 @@ class LockerFragment : Fragment() {
             adapter = likedAdapter
             layoutManager = GridLayoutManager(this@LockerFragment.context, 2)
         }
-        likedAdapter.itemClick = object :LikedAdapter.ItemClick{
+        likedAdapter.itemClick = object : LikedAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
-                LikedData.delLikedList(position)
                 likedAdapter.notifyDataSetChanged()
             }
-
         }
+        val likeObserver = Observer<com.android.kakaobankproject.kakaoData.Document> { newList ->
+            likedList.add(newList)
+        }
+        model.addList.observe(viewLifecycleOwner, likeObserver)
     }
 
-//    companion object {
-//        @JvmStatic
-//        fun newInstance(param1: String, param2: String) =
-//            LockerFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-//            }
-//    }
+    companion object {
+        fun newInstance() = LockerFragment()
+    }
 }

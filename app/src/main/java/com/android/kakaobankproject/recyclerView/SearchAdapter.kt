@@ -3,13 +3,13 @@ package com.android.kakaobankproject.recyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.android.kakaobankproject.databinding.ItemRecyclerViewGridBinding
-import com.android.kakaobankproject.kakaoData.SearchData
-import com.android.kakaobankproject.kakaoData.SearchData.searchList
+import com.android.kakaobankproject.kakaoData.Document
 import com.bumptech.glide.Glide
 
-class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.Holder>() {
+class SearchAdapter(private val searchList: MutableList<Document>) : RecyclerView.Adapter<SearchAdapter.Holder>() {
 
     interface ItemClick{
         fun onClick(view: View, position: Int)
@@ -19,6 +19,7 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.Holder {
         val binding = ItemRecyclerViewGridBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        Toast.makeText(parent.context, searchList.size.toString(), Toast.LENGTH_SHORT).show()
         return Holder(binding)
     }
 
@@ -32,7 +33,6 @@ class SearchAdapter() : RecyclerView.Adapter<SearchAdapter.Holder>() {
             .into(holder.imageView)
         holder.site.text = searchList[position].display_sitename
         holder.currentTime.text = searchList[position].datetime
-        var like = SearchData.liked
     }
 
     override fun getItemCount(): Int {

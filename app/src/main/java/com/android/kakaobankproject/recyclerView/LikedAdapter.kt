@@ -5,10 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.kakaobankproject.databinding.ItemRecyclerViewGridLikeBinding
-import com.android.kakaobankproject.likedData.LikedData.likedList
 import com.bumptech.glide.Glide
 
-class LikedAdapter() : RecyclerView.Adapter<LikedAdapter.Holder>() {
+class LikedAdapter(private val likedList: MutableList<com.android.kakaobankproject.kakaoData.Document>) : RecyclerView.Adapter<LikedAdapter.Holder>() {
 
     interface  ItemClick{
         fun onClick(view: View, position: Int)
