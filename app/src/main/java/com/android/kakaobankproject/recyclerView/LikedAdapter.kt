@@ -1,13 +1,16 @@
 package com.android.kakaobankproject.recyclerView
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.android.kakaobankproject.SearchFragment
 import com.android.kakaobankproject.databinding.ItemRecyclerViewGridLikeBinding
 import com.bumptech.glide.Glide
+import org.w3c.dom.Document
 
-class LikedAdapter(private val likedList: MutableList<com.android.kakaobankproject.kakaoData.Document>) : RecyclerView.Adapter<LikedAdapter.Holder>() {
+class LikedAdapter(private var likedList: MutableList<com.android.kakaobankproject.kakaoData.Document>) : RecyclerView.Adapter<LikedAdapter.Holder>() {
 
     interface  ItemClick{
         fun onClick(view: View, position: Int)
@@ -17,6 +20,7 @@ class LikedAdapter(private val likedList: MutableList<com.android.kakaobankproje
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LikedAdapter.Holder {
         val binding = ItemRecyclerViewGridLikeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        Log.d("asdfonCreateView", "${likedList.size}")
         return Holder(binding)
     }
 
@@ -30,6 +34,7 @@ class LikedAdapter(private val likedList: MutableList<com.android.kakaobankproje
             .into(holder.imageView)
         holder.site.text = likedList[position].display_sitename
         holder.currentTime.text = likedList[position].datetime
+        Log.d("asdfonBIndView", "${likedList.size}")
     }
 
     override fun getItemCount(): Int {
@@ -40,6 +45,13 @@ class LikedAdapter(private val likedList: MutableList<com.android.kakaobankproje
         var imageView = binding.imageView
         val site = binding.textView
         val currentTime = binding.currentTime
+    }
+
+    fun setLikeList(saveLike: MutableList<com.android.kakaobankproject.kakaoData.Document>){
+        likedList.clear()
+        likedList.addAll(saveLike)
+        Log.d("LikedAdapter", "${likedList.map { it.display_sitename }}")
+        notifyDataSetChanged()
     }
 
 }

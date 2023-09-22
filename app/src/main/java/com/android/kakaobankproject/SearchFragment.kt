@@ -5,9 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.kakaobankproject.databinding.FragmentSearchBinding
@@ -16,21 +14,16 @@ import com.android.kakaobankproject.netWork.NetWorkClient
 import com.android.kakaobankproject.recyclerView.SearchAdapter
 import kotlinx.coroutines.launch
 
-class SearchFragment : Fragment() {
+class SearchFragment() : Fragment() {
 
     var searchList = mutableListOf<Document>()
     private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
     private var items = mutableListOf<Document>()
     private var search: String = "사과"
     private var searchAdapter = SearchAdapter(searchList)
-    private lateinit var viewModel: LikeViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var saveLiked: SaveLike
 
-        viewModel = ViewModelProvider(this)[LikeViewModel::class.java]
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +40,6 @@ class SearchFragment : Fragment() {
             search = binding.editSearch.text.toString()
             searchData(setupSearchParameter(search))
             searchAdapter.notifyDataSetChanged()
-            Toast.makeText(requireContext(), search, Toast.LENGTH_SHORT).show()
         }
 
         binding.searchRecyclerView.apply {
@@ -58,8 +50,7 @@ class SearchFragment : Fragment() {
         searchAdapter.itemClick = object : SearchAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
                 if (!searchList[position].like) {
-                    var addLike = searchList[position]
-                    viewModel.addItem(addLike)
+                    saveLiked.add(searchList[position])
                 }
             }
         }
@@ -76,7 +67,7 @@ class SearchFragment : Fragment() {
         Log.d("Parsing search ::", kakaoDto.toString())
         items = kakaoDto.documents
 
-        searchList = items
+        searchList.addAll(items)
     }
 
     private fun setupSearchParameter(search: String): HashMap<String, String> {
@@ -86,6 +77,14 @@ class SearchFragment : Fragment() {
             "page" to "1",
             "size" to "80"
         )
+    }
+
+    interface SaveLike{
+        fun add(list: Document)
+    }
+
+    fun setSaveLike(callback: SaveLike){
+        saveLiked = callback
     }
 
 }

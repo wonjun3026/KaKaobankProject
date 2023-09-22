@@ -19,7 +19,6 @@ class SearchAdapter(private val searchList: MutableList<Document>) : RecyclerVie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.Holder {
         val binding = ItemRecyclerViewGridBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        Toast.makeText(parent.context, searchList.size.toString(), Toast.LENGTH_SHORT).show()
         return Holder(binding)
     }
 
