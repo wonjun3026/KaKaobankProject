@@ -11,8 +11,10 @@ class LikeViewModel : ViewModel() {
 
     fun addItem(item: Document) {
         val currentList = addList.value?.toMutableList() ?: mutableListOf()
-        currentList.add(item)
-        addList.value = currentList
+        if (!currentList.contains(item)) {
+            currentList.add(item)
+            addList.value = currentList
+        }
     }
 
     fun removeItem(item: Document) {

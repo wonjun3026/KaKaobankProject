@@ -49,9 +49,7 @@ class SearchFragment() : Fragment() {
         }
         searchAdapter.itemClick = object : SearchAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
-                if (!searchList[position].like) {
-                    saveLiked.add(searchList[position])
-                }
+                saveLiked.add(searchList[position])
             }
         }
 
@@ -77,6 +75,9 @@ class SearchFragment() : Fragment() {
 
     interface SaveLike{
         fun add(list: Document)
+        fun check(list: Document){
+
+        }
     }
 
     fun setSaveLike(callback: SaveLike){
