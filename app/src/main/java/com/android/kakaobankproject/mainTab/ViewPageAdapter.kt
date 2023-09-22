@@ -12,10 +12,11 @@ class ViewPageAdapter(
 
     private val fragments = ArrayList<MainTabs>()
     val searchFragment = SearchFragment()
+    val lockerFragment = LockerFragment()
 
     init {
         fragments.add(MainTabs(searchFragment, "검색 결과"))
-        fragments.add(MainTabs(LockerFragment(), "내 보관함"))
+        fragments.add(MainTabs(lockerFragment, "내 보관함"))
     }
 
     fun getTitle(position: Int): String {

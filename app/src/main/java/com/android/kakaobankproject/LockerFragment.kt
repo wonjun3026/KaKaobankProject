@@ -1,6 +1,7 @@
 package com.android.kakaobankproject
 
 import android.os.Bundle
+import android.os.ProxyFileDescriptorCallback
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +17,9 @@ import com.android.kakaobankproject.recyclerView.LikedAdapter
 
 class LockerFragment : Fragment() {
     private val binding by lazy { FragmentLockerBinding.inflate(layoutInflater) }
-    var likedList = mutableListOf<com.android.kakaobankproject.kakaoData.Document>()
-    private val likedAdapter = LikedAdapter(likedList)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    var likedList = mutableListOf<Document>()
+    private var likedAdapter = LikedAdapter(likedList)
+    private lateinit var deleteLiked: DeleteLike
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +38,7 @@ class LockerFragment : Fragment() {
         }
         likedAdapter.itemClick = object : LikedAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
-
+                deleteLiked.removeList(likedList[position])
             }
         }
     }
@@ -49,5 +47,12 @@ class LockerFragment : Fragment() {
         likedList = list.toMutableList()
         likedAdapter.setLikeList(likedList)
         Log.d("LockerList", "${likedList.map { it.display_sitename }}")
+    }
+
+    interface DeleteLike{
+        fun removeList(list: Document)
+    }
+    fun setDeleteLike(callback: DeleteLike){
+        deleteLiked = callback
     }
 }

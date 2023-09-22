@@ -9,13 +9,16 @@ import com.android.kakaobankproject.kakaoData.Document
 import com.android.kakaobankproject.mainTab.ViewPageAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MainActivity() : AppCompatActivity(), SearchFragment.SaveLike {
+class MainActivity() : AppCompatActivity(), SearchFragment.SaveLike, LockerFragment.DeleteLike{
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
     private lateinit var viewModel: LikeViewModel
-    private val lockerFragment = LockerFragment()
+
     private val viewPagerAdapter by lazy {
         ViewPageAdapter(this)
+    }
+    private val lockerFragment by lazy {
+        viewPagerAdapter.lockerFragment
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,7 @@ class MainActivity() : AppCompatActivity(), SearchFragment.SaveLike {
 
         binding.mainViewpager.adapter = viewPagerAdapter
         viewPagerAdapter.searchFragment.setSaveLike(this)
+        viewPagerAdapter.lockerFragment.setDeleteLike(this)
         TabLayoutMediator(binding.mainTab, binding.mainViewpager){ tab, position ->
             tab.text = viewPagerAdapter.getTitle(position)
         }.attach()
@@ -36,6 +40,10 @@ class MainActivity() : AppCompatActivity(), SearchFragment.SaveLike {
 
     override fun add(list: Document) {
         viewModel.addItem(list)
+    }
+
+    override fun removeList(list: Document) {
+        viewModel.removeItem(list)
     }
 
 }

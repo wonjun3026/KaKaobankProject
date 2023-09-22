@@ -57,10 +57,6 @@ class SearchFragment() : Fragment() {
 
     }
 
-    companion object {
-        fun newInstance() = SearchFragment()
-    }
-
     private fun searchData(param: HashMap<String, String>) = lifecycleScope.launch {
         val kakaoDto =
             NetWorkClient.searchNetWork.getImage("KakaoAK 5e8528dc4a83dcfa1bc04bb05cec677c", param)
