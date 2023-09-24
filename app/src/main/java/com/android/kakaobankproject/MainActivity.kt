@@ -9,7 +9,7 @@ import com.android.kakaobankproject.kakaoData.Document
 import com.android.kakaobankproject.mainTab.ViewPageAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MainActivity() : AppCompatActivity(), SearchFragment.SaveLike, LockerFragment.DeleteLike{
+class MainActivity : AppCompatActivity(), SearchFragment.SaveLike, LockerFragment.DeleteLike{
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
     private lateinit var viewModel: LikeViewModel
@@ -20,6 +20,10 @@ class MainActivity() : AppCompatActivity(), SearchFragment.SaveLike, LockerFragm
     private val lockerFragment by lazy {
         viewPagerAdapter.lockerFragment
     }
+    private val searchFragment by lazy {
+        viewPagerAdapter.searchFragment
+    }
+    private var url: String = "1"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -35,6 +39,7 @@ class MainActivity() : AppCompatActivity(), SearchFragment.SaveLike, LockerFragm
 
         viewModel.addList.observe(this, Observer{ newList ->
             lockerFragment.receiveList(newList)
+            searchFragment.removeLike(url)
         })
     }
 
@@ -44,6 +49,7 @@ class MainActivity() : AppCompatActivity(), SearchFragment.SaveLike, LockerFragm
 
     override fun removeList(list: Document) {
         viewModel.removeItem(list)
+        url = list.thumbnail_url
     }
 
 }

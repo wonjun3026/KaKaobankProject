@@ -24,7 +24,6 @@ class SearchFragment() : Fragment() {
 
     private lateinit var saveLiked: SaveLike
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,7 +48,9 @@ class SearchFragment() : Fragment() {
         }
         searchAdapter.itemClick = object : SearchAdapter.ItemClick {
             override fun onClick(view: View, position: Int) {
+                searchList[position].like = true
                 saveLiked.add(searchList[position])
+                searchAdapter.notifyDataSetChanged()
             }
         }
 
@@ -75,13 +76,13 @@ class SearchFragment() : Fragment() {
 
     interface SaveLike{
         fun add(list: Document)
-        fun check(list: Document){
-
-        }
     }
 
     fun setSaveLike(callback: SaveLike){
         saveLiked = callback
     }
 
+    fun removeLike(url: String){
+        searchAdapter.setLikeList(url)
+    }
 }

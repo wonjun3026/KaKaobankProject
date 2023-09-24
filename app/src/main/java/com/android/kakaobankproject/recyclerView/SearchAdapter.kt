@@ -32,6 +32,7 @@ class SearchAdapter(private val searchList: MutableList<Document>) : RecyclerVie
             .into(holder.imageView)
         holder.site.text = searchList[position].display_sitename
         holder.currentTime.text = searchList[position].datetime
+        holder.like.visibility = if(searchList[position].like) View.VISIBLE else View.GONE
     }
 
     override fun getItemCount(): Int {
@@ -42,5 +43,14 @@ class SearchAdapter(private val searchList: MutableList<Document>) : RecyclerVie
         var imageView = binding.imageView
         val site = binding.textView
         val currentTime = binding.currentTime
+        var like = binding.likeImage
+    }
+    fun setLikeList(url: String){
+        for ((idx, i) in searchList.withIndex()){
+            if (url == searchList[idx].thumbnail_url){
+                searchList[idx].like = false
+            }
+        }
+        notifyDataSetChanged()
     }
 }

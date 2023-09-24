@@ -46,7 +46,6 @@ class LockerFragment : Fragment() {
     fun receiveList(list: List<Document>){
         likedList = list.toMutableList()
         likedAdapter.setLikeList(likedList)
-        Log.d("LockerList", "${likedList.map { it.display_sitename }}")
     }
 
     interface DeleteLike{

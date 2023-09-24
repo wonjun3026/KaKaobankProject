@@ -50,7 +50,6 @@ class LikedAdapter(private var likedList: MutableList<com.android.kakaobankproje
     fun setLikeList(saveLike: MutableList<com.android.kakaobankproject.kakaoData.Document>){
         likedList.clear()
         likedList.addAll(saveLike)
-        Log.d("LikedAdapter", "${likedList.map { it.display_sitename }}")
         notifyDataSetChanged()
     }
 
